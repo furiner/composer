@@ -3,7 +3,7 @@ using osu.Game;
 
 namespace composer.Editor
 {
-    public class EditorGame : OsuGameBase
+    public partial class EditorGame : OsuGameBase
     {
         [BackgroundDependencyLoader]
         private void load()
