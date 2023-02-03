@@ -35,7 +35,7 @@ namespace composer.Editor.Plugins
                     return;
                 }
 
-                LoadedAssemblies[assembly] = assembly.GetTypes().First(t => t.IsPublic && t.IsSubclassOf(typeof(Plugin)))
+                LoadedAssemblies[assembly] = assembly.GetTypes().First(t => t.IsPublic && t.IsSubclassOf(typeof(Plugin)));
             } catch
             {
                 // fuck you exceptions >:(
