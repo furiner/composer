@@ -13,6 +13,12 @@
       "commands": [
         "nvika"
       ]
+    },
+    "OpenCover": {
+      "version": "4.7.1221",
+      "commands": [
+        "opencover"
+      ]
     }
   }
 }
