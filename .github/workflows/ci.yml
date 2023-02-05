@@ -1,0 +1,49 @@
+on: [push, pull_request]
+name: Continuous Integration
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ${{matrix.os.fullname}}
+    env:
+      OSU_EXECUTION_MODE: ${{matrix.threadingMode}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - { prettyname: Windows, fullname: windows-latest }
+          - { prettyname: macOS, fullname: macos-latest }
+          - { prettyname: Linux, fullname: ubuntu-latest }
+        threadingMode: ['SingleThread', 'MultiThread']
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET 6.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Compile
+        run: dotnet build -c Debug -warnaserror composer.slnf
+        
+        
+      - name: Test
+        run: dotnet test $pwd/**/*.Tests/bin/Debug/*/*.Tests.dll --logger "trx;LogFileName=TestResults-${{matrix.os.prettyname}}-${{matrix.threadingMode}}.trx" -- NUnit.ConsoleOut=0
+        shell: pwsh
+
+      # Attempt to upload results even if test fails.
+      # https://docs.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#always
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          name: composer-test-results-${{matrix.os.prettyname}}-${{matrix.threadingMode}}
+          path: ${{github.workspace}}/TestResults/TestResults-${{matrix.os.prettyname}}-${{matrix.threadingMode}}.trx
