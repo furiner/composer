@@ -32,7 +32,7 @@ jobs:
           dotnet-version: "6.0.x"
 
       - name: Compile
-        run: dotnet build -c Debug -warnaserror composer.slnf
+        run: dotnet build -c Debug -warnaserror composer.sln
         
         
       - name: Test
