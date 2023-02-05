@@ -1,7 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using composer.Editor;
-using osu.Framework;
+﻿using osu.Framework;
 using osu.Framework.Platform;
 
 namespace composer.Desktop
