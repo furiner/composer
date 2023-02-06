@@ -14,7 +14,7 @@ namespace composer.Desktop
         {
             base.LoadComplete();
             
-            LoadComponent(new DiscordRichPresence());
+            LoadComponentAsync(new DiscordRichPresence());
         }
     }
 }
