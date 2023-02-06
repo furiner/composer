@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build:
+  build-job:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
       - image: mcr.microsoft.com/dotnet/runtime:6.0
@@ -27,4 +27,4 @@ workflows:
   build: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build
+      - build-job
