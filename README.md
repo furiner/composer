@@ -6,7 +6,6 @@
 	<!-- Icons -->
     <a href="https:/github.com/irisu01/composer/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/composer-dev/composer?style=flat-square" /></a>
     <a href="https://circleci.com/gh/composer-dev/composer/"><img src="https://dl.circleci.com/status-badge/img/gh/composer-dev/composer/tree/master.svg?style=svg" /></a>
-    <a href="https://codecov.io/gh/composer-dev/composer"><img src="https://codecov.io/gh/composer-dev/composer/branch/master/graph/badge.svg?token=63QEIZDCC8" /></a>
 </div>
 
 ## What is this project?
