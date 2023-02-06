@@ -9,7 +9,7 @@ namespace composer.Tests.Visual
         [BackgroundDependencyLoader]
         private void load()
         {
-            AddGame(new EditorGame());
+            AddGame(new Composer());
         }
     }
 }
