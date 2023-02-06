@@ -1,8 +1,7 @@
-﻿using composer.Editor;
-using osu.Framework.Allocation;
+﻿using osu.Framework.Allocation;
 using osu.Framework.Testing;
 
-namespace composer.Tests.Visual
+namespace composer.Editor.Tests.Visual
 {
     public partial class TestSceneEditorGame : TestScene
     {
