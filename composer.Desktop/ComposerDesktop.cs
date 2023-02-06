@@ -1,5 +1,6 @@
 ﻿using composer.Desktop.Online;
 using composer.Editor;
+using osu.Framework.Platform;
 
 namespace composer.Desktop
 {
@@ -15,6 +16,12 @@ namespace composer.Desktop
             base.LoadComplete();
             
             LoadComponentAsync(new DiscordRichPresence());
+        }
+
+        public override void SetHost(GameHost host)
+        {
+            base.SetHost(host);
+            host.Window.CursorState |= CursorState.Hidden;
         }
     }
 }
