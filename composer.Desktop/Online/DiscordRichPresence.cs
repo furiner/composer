@@ -9,9 +9,11 @@ namespace composer.Desktop.Online
     {
         private const string application_id = "1071771476409192448";
         private DiscordRpcClient client = null!;
-
-        public readonly RichPresence CurrentPresence = new RichPresence()
-            { };
+        
+        public readonly RichPresence CurrentPresence = new RichPresence
+        {
+            Assets = new Assets { LargeImageKey = "composer-logo" }
+        };
 
         [BackgroundDependencyLoader]
         private void load()
@@ -25,6 +27,11 @@ namespace composer.Desktop.Online
         
         private void onReady(object sender, ReadyMessage readyEvent) {
             
+        }
+
+        private void updatePresence()
+        {
+            client.SetPresence(CurrentPresence);
         }
     }
 }
