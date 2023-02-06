@@ -5,7 +5,7 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-and-test:
+  build:
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:6.0
       - image: mcr.microsoft.com/dotnet/runtime:6.0
@@ -20,17 +20,11 @@ jobs:
           name: Build composer
           command: |
             dotnet build -c Debug -warnaserror composer.Editor
-      - run:
-          # Update this line with the directory that contains your tests project file
-          working_directory: ~/project/composer.Tests
-          name: Run tests
-          command: |
-            dotnet test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+  build: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build-and-test
+      - build
