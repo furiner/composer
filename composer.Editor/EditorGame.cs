@@ -5,7 +5,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.IO.Stores;
-using osu.Framework.Platform;
 using osu.Game;
 using osuTK;
 using osuTK.Graphics;
@@ -67,12 +66,6 @@ namespace composer.Editor
             AddFont(Resources, "Fonts/Montserrat/Montserrat-Light");
 
             base.InitialiseFonts();
-        }
-
-        public override void SetHost(GameHost host)
-        {
-            base.SetHost(host);
-            host.Window.CursorState |= CursorState.Hidden;
         }
     }
 }
