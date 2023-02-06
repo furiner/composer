@@ -14,9 +14,5 @@
         <EmbeddedResource Include="Tracks\**\*" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Fonts" />
-    </ItemGroup>
-
 
 </Project>
