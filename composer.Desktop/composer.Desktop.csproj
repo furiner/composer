@@ -11,4 +11,8 @@
       <ProjectReference Include="..\composer.Editor\composer.Editor.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="DiscordRichPresence" Version="1.1.3.18" />
+    </ItemGroup>
+
 </Project>
