@@ -3,7 +3,7 @@ using osu.Framework.Platform;
 using osu.Framework.Testing;
 using osu.Game;
 
-namespace composer.Tests
+namespace composer.Editor.Tests
 {
     public partial class EditorTestBrowser : OsuGameBase
     {
@@ -13,7 +13,7 @@ namespace composer.Tests
             
             AddRange(new Drawable[]
             {
-                new TestBrowser("composer.Tests"),
+                new TestBrowser("composer.Editor.Tests"),
             });
         }
 

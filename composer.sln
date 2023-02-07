@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "composer.Desktop", "compose
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "composer.Resources", "composer.Resources\composer.Resources.csproj", "{76366C9B-1060-46C3-8543-618FE642805B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "composer.Tests", "composer.Tests\composer.Tests.csproj", "{E71A93C3-6BAC-4F0A-B54B-5034DA238CAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "composer.Editor.Tests", "composer.Editor.Tests\composer.Editor.Tests.csproj", "{E71A93C3-6BAC-4F0A-B54B-5034DA238CAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{27CC8DB0-6655-44A9-A956-C21723B43DA7}"
 	ProjectSection(SolutionItems) = preProject

@@ -10,7 +10,7 @@ using osu.Game;
 
 namespace composer.Editor
 {
-    public partial class EditorGame : OsuGameBase
+    public partial class Composer : OsuGameBase
     {
         private Container content = null!;
 

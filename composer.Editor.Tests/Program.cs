@@ -1,6 +1,6 @@
 ﻿using osu.Framework;
 
-namespace composer.Tests
+namespace composer.Editor.Tests
 {
     public static class Program
     {
