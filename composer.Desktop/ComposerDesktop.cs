@@ -4,7 +4,7 @@ using osu.Framework.Platform;
 
 namespace composer.Desktop
 {
-    public partial class ComposerDesktop : EditorGame
+    public partial class ComposerDesktop : Composer
     {
         public ComposerDesktop()
         {

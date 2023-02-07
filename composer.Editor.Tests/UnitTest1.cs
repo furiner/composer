@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace composer.Tests
+namespace composer.Editor.Tests
 {
     public class Tests
     {
