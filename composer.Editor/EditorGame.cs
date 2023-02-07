@@ -1,13 +1,12 @@
 ﻿using composer.Editor.Graphics.Cursor;
+using composer.Editor.Screens.Menu;
 using composer.Resources;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.IO.Stores;
+using osu.Framework.Screens;
 using osu.Game;
-using osuTK;
-using osuTK.Graphics;
 
 namespace composer.Editor
 {
@@ -16,6 +15,8 @@ namespace composer.Editor
         private Container content = null!;
 
         protected override Container<Drawable> Content => content;
+
+        protected ScreenStack ScreenStack = null!;
 
         protected DependencyContainer DependencyContainer = null!;
 
@@ -39,17 +40,10 @@ namespace composer.Editor
                     State = { Value = Visibility.Visible },
                     Child = content = new Container
                     {
-                        RelativeSizeAxes = Axes.Both
+                        RelativeSizeAxes = Axes.Both,
+                        Child = ScreenStack = new ScreenStack(new MainMenu())
                     }
                 }
-            });
-
-            base.Add(new SpriteText
-            {
-                Font = new FontUsage("Montserrat", size: 40, weight: "Regular"),
-                Text = "Balls and cock",
-                Position = new Vector2(50),
-                Colour = Color4.White,
             });
         }
 
