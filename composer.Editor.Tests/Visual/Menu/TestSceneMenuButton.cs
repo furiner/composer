@@ -4,7 +4,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Testing;
 using osuTK;
 
-namespace composer.Tests.Visual.Menu
+namespace composer.Editor.Tests.Visual.Menu
 {
     public partial class TestSceneMenuButton : TestScene
     {
