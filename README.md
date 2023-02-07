@@ -4,8 +4,8 @@
 		An expansive and expressive editor made for the <a href="https://osu.ppy.sh" target="_blank" />osu!</a> game.
 	</p>
 	<!-- Icons -->
-    <a href="https:/github.com/irisu01/composer/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/irisu01/composer?style=flat-square" /></a>
-    <a href="https://circleci.com/gh/irisu01/composer/"><img src="https://img.shields.io/circleci/build/github/irisu01/composer/master?style=flat-square" /></a>
+    <a href="https:/github.com/irisu01/composer/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/composer-dev/composer?style=flat-square" /></a>
+    <a href="https://circleci.com/gh/composer-dev/composer/"><img src="https://dl.circleci.com/status-badge/img/gh/composer-dev/composer/tree/master.svg?style=svg" /></a>
 </div>
 
 ## What is this project?
