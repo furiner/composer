@@ -6,6 +6,8 @@
 	<!-- Icons -->
     <a href="https:/github.com/irisu01/composer/blob/master/LICENSE.md"><img src="https://img.shields.io/github/license/composer-dev/composer?style=flat-square" /></a>
     <a href="https://circleci.com/gh/composer-dev/composer/"><img src="https://dl.circleci.com/status-badge/img/gh/composer-dev/composer/tree/master.svg?style=svg" /></a>
+    <a href="https://discord.gg/WGxeAFSWuy"><img src="https://canary.discord.com/api/guilds/1072271271284441249/widget.png?style=shield"> /></a>
+    <a href="https://www.codefactor.io/repository/github/composer-dev/composer"><img src="https://www.codefactor.io/repository/github/composer-dev/composer/badge" alt="CodeFactor" /></a>
 </div>
 
 ## What is this project?
@@ -27,4 +29,4 @@ Currently, we are in the phase of prototyping the project, so we do not have a r
 
 ### Questions & Support
 
-For all questions and support, we would like for you to use our established [Discord Server] to ask any questions you may have. We will be happy to help you out! Our issue tracker here on GitHub is used **exclusively** for feature requests, security issues and all other reports.
+For all questions and support, we would like for you to use our established [Discord Server](https://discord.gg/WGxeAFSWuy) to ask any questions you may have. We will be happy to help you out! Our issue tracker here on GitHub is used **exclusively** for feature requests, security issues and all other reports.
