@@ -72,7 +72,7 @@ namespace composer.Editor.Screens.Select.Carousel
             iconFlow.ChildrenEnumerable = getDifficultyIcons();
         }
         
-        private const int maximum_difficulty_lines = 18;
+        private const int maximum_difficulty_lines = 20;
 
         private IEnumerable<Drawable> getDifficultyIcons()
         {
@@ -91,20 +91,35 @@ namespace composer.Editor.Screens.Select.Carousel
                 };
                 
                 flowContainer.Add(info.Key.CreateInstance().CreateIcon().With(d => d.Size = new Vector2(16)));
-                var orderedBeatmaps = info.ToList().OrderBy(b => b.StarRating);
-                
-                foreach (var beatmap in orderedBeatmaps)
+                var orderedBeatmaps = info.OrderBy(b => b.StarRating).ToList();
+
+                if (orderedBeatmaps.Count >= maximum_difficulty_lines)
                 {
-                    flowContainer.Add(new Circle
+                    flowContainer.Add(new OsuSpriteText
                     {
-                        RelativeSizeAxes = Axes.Y,
-                        Width = 4,
+                        Text = orderedBeatmaps.Count.ToString(),
+                        Font = OsuFont.GetFont(Typeface.Inter, weight: FontWeight.Regular, size: 16),
+                        Shadow = true,
                         Origin = Anchor.CentreLeft,
                         Anchor = Anchor.CentreLeft,
-                        Colour = colours.ForStarDifficulty(beatmap.StarRating)
+                        Alpha = 0.5f
                     });
                 }
-                
+                else
+                {
+                    foreach (var beatmap in orderedBeatmaps)
+                    {
+                        flowContainer.Add(new Circle
+                        {
+                            RelativeSizeAxes = Axes.Y,
+                            Width = 4,
+                            Origin = Anchor.CentreLeft,
+                            Anchor = Anchor.CentreLeft,
+                            Colour = colours.ForStarDifficulty(beatmap.StarRating)
+                        });
+                    }
+                }
+
                 yield return flowContainer;
             }
         }

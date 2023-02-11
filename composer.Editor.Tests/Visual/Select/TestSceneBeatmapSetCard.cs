@@ -1,6 +1,6 @@
 ﻿using composer.Editor.Screens.Select.Carousel;
 using composer.Editor.Tests.Resources;
-using osu.Framework.Allocation;
+using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Game.Rulesets.Catch;
 using osu.Game.Rulesets.Mania;
@@ -13,15 +13,22 @@ namespace composer.Editor.Tests.Visual.Select
 {
     public partial class TestSceneBeatmapSetCard : OsuTestScene
     {
-        [BackgroundDependencyLoader]
-        private void load()
+        [TestCase(null)]
+        [TestCase(20)]
+        [TestCase(40)]
+        [TestCase(80)]
+        public void TestBeatmaps(int? amount = null)
         {
-            Add(new BeatmapSetCard(TestResources.CreateTestBeatmapSetInfo(null,
-                new[] { new OsuRuleset().RulesetInfo, new TaikoRuleset().RulesetInfo, new CatchRuleset().RulesetInfo, new ManiaRuleset().RulesetInfo }))
+            AddStep("clear screen", Clear);
+            AddStep("add card", () =>
             {
-                Size = new Vector2(720, 80),
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre
+                Add(new BeatmapSetCard(TestResources.CreateTestBeatmapSetInfo(amount,
+                    new[] { new OsuRuleset().RulesetInfo, new TaikoRuleset().RulesetInfo, new CatchRuleset().RulesetInfo, new ManiaRuleset().RulesetInfo }))
+                {
+                    Size = new Vector2(720, 80),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre
+                });
             });
         }
     }
