@@ -5,8 +5,8 @@ using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.IO.Stores;
-using osu.Framework.Screens;
 using osu.Game;
+using osu.Game.Screens;
 
 namespace composer.Editor
 {
@@ -16,7 +16,7 @@ namespace composer.Editor
 
         protected override Container<Drawable> Content => content;
 
-        protected ScreenStack ScreenStack = null!;
+        protected OsuScreenStack ScreenStack = null!;
 
         protected DependencyContainer DependencyContainer = null!;
 
@@ -41,10 +41,12 @@ namespace composer.Editor
                     Child = content = new Container
                     {
                         RelativeSizeAxes = Axes.Both,
-                        Child = ScreenStack = new ScreenStack(new MainMenu())
+                        Child = ScreenStack = new OsuScreenStack()
                     }
                 }
             });
+
+            ScreenStack.PushSynchronously(new MainMenu());
         }
 
         // NOTE: This is called before load()
