@@ -91,10 +91,9 @@ namespace composer.Editor.Screens.Select.Carousel
                 };
                 
                 flowContainer.Add(info.Key.CreateInstance().CreateIcon().With(d => d.Size = new Vector2(16)));
-                var groupedBeatmaps = info.ToList();
-                groupedBeatmaps.Sort((b1, b2) => (int) (b1.StarRating - b2.StarRating));
+                var orderedBeatmaps = info.ToList().OrderBy(b => b.StarRating);
                 
-                foreach (var beatmap in groupedBeatmaps)
+                foreach (var beatmap in orderedBeatmaps)
                 {
                     flowContainer.Add(new Circle
                     {
