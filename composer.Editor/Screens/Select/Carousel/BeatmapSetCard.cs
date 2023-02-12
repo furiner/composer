@@ -27,14 +27,14 @@ namespace composer.Editor.Screens.Select.Carousel
                 CornerRadius = 5,
                 Children = new Drawable[]
                 {
-                    background = new DelayedLoadWrapper(() => new SetPanelBackground(manager.GetWorkingBeatmap(beatmapSet.Beatmaps.FirstOrDefault()))
+                    background = new DelayedLoadWrapper(() => new BeatmapSetPanelBackground(manager.GetWorkingBeatmap(beatmapSet.Beatmaps.FirstOrDefault()))
                     {
                         RelativeSizeAxes = Axes.Both
                     }, 100)
                     {
                         RelativeSizeAxes = Axes.Both
                     },
-                    mainContent = new DelayedLoadWrapper(() => new SetPanelContent(beatmapSet), 100)
+                    mainContent = new DelayedLoadWrapper(() => new BeatmapSetPanelContent(beatmapSet), 100)
                     {
                         RelativeSizeAxes = Axes.Both
                     } 

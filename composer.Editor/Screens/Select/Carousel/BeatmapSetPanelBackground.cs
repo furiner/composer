@@ -9,9 +9,9 @@ using osu.Game.Graphics;
 
 namespace composer.Editor.Screens.Select.Carousel
 {
-    public partial class SetPanelBackground : BufferedContainer
+    public partial class BeatmapSetPanelBackground : BufferedContainer
     {
-        public SetPanelBackground(IWorkingBeatmap working)
+        public BeatmapSetPanelBackground(IWorkingBeatmap working)
             : base(cachedFrameBuffer: true)
         {
             RedrawOnScale = false;

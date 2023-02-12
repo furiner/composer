@@ -10,13 +10,13 @@ using osuTK;
 
 namespace composer.Editor.Screens.Select.Carousel
 {
-    public partial class SetPanelContent : CompositeDrawable
+    public partial class BeatmapSetPanelContent : CompositeDrawable
     {
         private readonly BeatmapSetInfo beatmapSet;
 
         private FillFlowContainer iconFlow = null!;
 
-        public SetPanelContent(BeatmapSetInfo beatmapSet)
+        public BeatmapSetPanelContent(BeatmapSetInfo beatmapSet)
         {
             this.beatmapSet = beatmapSet;
 
