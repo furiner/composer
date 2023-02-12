@@ -17,15 +17,15 @@ namespace composer.Editor.Tests.Resources
         /// </summary>
         /// <param name="difficultyCount">Number of difficulties. If null, a random number between 1 and 20 will be used.</param>
         /// <param name="rulesets">Rulesets to cycle through when creating difficulties. If <c>null</c>, osu! ruleset will be used.</param>
-        public static BeatmapSetInfo CreateTestBeatmapSetInfo(int? difficultyCount = null, RulesetInfo[] rulesets = null)
+        public static BeatmapSetInfo CreateTestBeatmapSetInfo(int? difficultyCount = null, RulesetInfo[]? rulesets = null!)
         {
-            int j = 0;
+            var j = 0;
 
             rulesets ??= new[] { new OsuRuleset().RulesetInfo };
 
-            RulesetInfo getRuleset() => rulesets?[j++ % rulesets.Length];
+            RulesetInfo getRuleset() => rulesets[j++ % rulesets.Length];
 
-            int setId = Interlocked.Increment(ref importId);
+            var setId = Interlocked.Increment(ref importId);
 
             var metadata = new BeatmapMetadata
             {
@@ -51,16 +51,16 @@ namespace composer.Editor.Tests.Resources
 
             IEnumerable<BeatmapInfo> getBeatmaps(int count)
             {
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
-                    int beatmapId = setId * 1000 + i;
+                    var beatmapId = setId * 1000 + i;
 
-                    int length = RNG.Next(30000, 200000);
+                    var length = RNG.Next(30000, 200000);
                     double bpm = RNG.NextSingle(80, 200);
 
-                    float diff = (float) i / count * 10;
+                    var diff = (float) i / count * 10;
 
-                    string version = "Normal";
+                    var version = "Normal";
                     if (diff > 6.6)
                         version = "Insane";
                     else if (diff > 3.3)
@@ -68,7 +68,7 @@ namespace composer.Editor.Tests.Resources
 
                     var rulesetInfo = getRuleset();
 
-                    string hash = Guid.NewGuid().ToString().ComputeMD5Hash();
+                    var hash = Guid.NewGuid().ToString().ComputeMD5Hash();
 
                     yield return new BeatmapInfo
                     {
