@@ -6,6 +6,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.IO.Stores;
 using osu.Game;
+using osu.Game.Configuration;
+using osu.Game.Graphics.Containers;
 using osu.Game.Screens;
 
 namespace composer.Editor
@@ -13,6 +15,8 @@ namespace composer.Editor
     public partial class Composer : OsuGameBase
     {
         private Container content = null!;
+
+        protected override Container CreateScalingContainer() => new ScalingContainer(ScalingMode.Everything);
 
         protected override Container<Drawable> Content => content;
 

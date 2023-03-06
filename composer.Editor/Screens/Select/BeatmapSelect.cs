@@ -71,7 +71,12 @@ namespace composer.Editor.Screens.Select
                         carouselContainer = new Container
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Padding = new MarginPadding(12)
+                            Padding = new MarginPadding
+                            {
+                                Right = 12,
+                                Left = 104,
+                                Vertical = 12,
+                            }
                         }
                     }
                 }

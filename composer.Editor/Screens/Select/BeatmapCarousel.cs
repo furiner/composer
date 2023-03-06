@@ -664,7 +664,7 @@ namespace composer.Editor.Screens.Select
                 if (item is DrawableCarouselBeatmapSetCard set)
                 {
                     foreach (var diff in set.DrawableBeatmaps)
-                        updateItem(diff);
+                        updateItem(diff, item);
                 }
             }
         }
@@ -831,12 +831,26 @@ namespace composer.Editor.Screens.Select
                 pendingScrollOperation = PendingScrollOperation.None;
             }
         }
+        
+        private static float offsetX(float dist, float halfHeight)
+        {
+            // The radius of the circle the carousel moves on.
+            const float circle_radius = 3;
+            float discriminant = MathF.Max(0, circle_radius * circle_radius - dist * dist);
+            float x = (circle_radius - MathF.Sqrt(discriminant)) * halfHeight;
 
-        private void updateItem(DrawableCarouselItem item)
+            return x;
+        }
+
+        private void updateItem(DrawableCarouselItem item, DrawableCarouselItem? parent = null)
         {
             Vector2 posInScroll = Scroll.ScrollContent.ToLocalSpace(item.Header.ScreenSpaceDrawQuad.Centre);
             float itemDrawY = posInScroll.Y - visibleUpperBound;
             float dist = Math.Abs(1f - itemDrawY / visibleHalfHeight);
+
+            // adjusting the item's overall X position can cause it to become masked away when
+            // child items (difficulties) are still visible.
+            item.Header.X = offsetX(dist, visibleHalfHeight) - (parent?.X ?? 0);
 
             // We are applying a multiplicative alpha (which is internally done by nesting an
             // additional container and setting that container's alpha) such that we can
