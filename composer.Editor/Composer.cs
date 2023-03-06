@@ -23,11 +23,6 @@ namespace composer.Editor
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
             => DependencyContainer = new DependencyContainer(base.CreateChildDependencies(parent));
 
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-        }
-
         protected override void LoadComplete()
         {
             base.LoadComplete();
@@ -54,7 +49,7 @@ namespace composer.Editor
         protected override void InitialiseFonts()
         {
             Resources.AddStore(new DllResourceStore(typeof(EditorResources).Assembly));
-            
+
             AddFont(Resources, "Fonts/Montserrat/Montserrat-Bold");
             AddFont(Resources, "Fonts/Montserrat/Montserrat-SemiBold");
             AddFont(Resources, "Fonts/Montserrat/Montserrat-Medium");

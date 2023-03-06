@@ -38,7 +38,7 @@ namespace composer.Editor.Screens.Menu
                         Origin = Anchor.Centre,
                         Action = delegate
                         {
-                            this.Push(new BeatmapSelect());
+                            this.Push(new EditBeatmapSelect());
                         }
                     },
                     new MenuButton
