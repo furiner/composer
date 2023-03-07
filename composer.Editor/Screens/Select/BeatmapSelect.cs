@@ -407,7 +407,6 @@ namespace composer.Editor.Screens.Select
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
-
             decoupledRuleset.UnbindAll();
 
             if (music.IsNotNull())
