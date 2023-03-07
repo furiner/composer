@@ -78,9 +78,10 @@ namespace composer.Editor.Screens.Select.Carousel
                     beatmapInfo.Ruleset.CreateInstance().CreateIcon().With(d =>
                     {
                         d.Size = new Vector2(20);
-                        d.Anchor = Anchor.CentreLeft;
-                        d.Origin = Anchor.CentreLeft;
-                        d.X = 7;
+                        d.Anchor = Anchor.CentreRight;
+                        d.Origin = Anchor.CentreRight;
+                        d.RelativePositionAxes = Axes.X;
+                        d.X = -0.9475f;
                         d.Colour = ComposerColour.ForegroundTextColourFor(getDifficultyColour(), 13);
                     }),
                     infoContainer = new Container
