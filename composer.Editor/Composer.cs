@@ -1,4 +1,5 @@
 ﻿using composer.Editor.Graphics.Cursor;
+using composer.Editor.Input;
 using composer.Editor.Screens.Menu;
 using composer.Resources;
 using osu.Framework.Allocation;
@@ -37,7 +38,7 @@ namespace composer.Editor
                 {
                     RelativeSizeAxes = Axes.Both,
                     State = { Value = Visibility.Visible },
-                    Child = content = new Container
+                    Child = content = new GlobalActionContainer(this)
                     {
                         RelativeSizeAxes = Axes.Both,
                         Child = ScreenStack = new OsuScreenStack()

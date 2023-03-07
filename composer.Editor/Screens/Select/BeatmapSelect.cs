@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using composer.Editor.Input;
 using osu.Framework.Allocation;
 using osu.Framework.Audio.Track;
 using osu.Framework.Bindables;
@@ -6,6 +7,8 @@ using osu.Framework.Extensions.ObjectExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input.Bindings;
+using osu.Framework.Input.Events;
 using osu.Framework.Logging;
 using osu.Framework.Screens;
 using osu.Framework.Threading;
@@ -17,7 +20,7 @@ using osu.Game.Screens.Play;
 
 namespace composer.Editor.Screens.Select
 {
-    public abstract partial class BeatmapSelect : ScreenWithBeatmapBackground
+    public abstract partial class BeatmapSelect : ScreenWithBeatmapBackground, IKeyBindingHandler<GlobalAction>
     {
         protected const float BACKGROUND_BLUR = 20;
 
@@ -470,6 +473,27 @@ namespace composer.Editor.Screens.Select
             Carousel.FlushPendingFilterOperations();
 
             return true;
+        }
+
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            if (e.Repeat)
+                return false;
+
+            if (!this.IsCurrentScreen()) return false;
+
+            switch (e.Action)
+            {
+                case GlobalAction.Select:
+                    FinaliseSelection();
+                    return true;
+            }
+            
+            return false;
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
         }
     }
 }

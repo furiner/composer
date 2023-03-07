@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using composer.Editor.Input;
 using composer.Editor.Screens.Select.Carousel;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -7,6 +8,7 @@ using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Pooling;
+using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Layout;
 using osu.Framework.Threading;
@@ -24,7 +26,7 @@ using DrawableCarouselItem = composer.Editor.Screens.Select.Carousel.DrawableCar
 
 namespace composer.Editor.Screens.Select
 {
-    public partial class BeatmapCarousel : CompositeDrawable
+    public partial class BeatmapCarousel : CompositeDrawable, IKeyBindingHandler<GlobalAction>
     {
         public float BleedTop { get; set; }
         public float BleedBottom { get; set; }
@@ -554,6 +556,31 @@ namespace composer.Editor.Screens.Select
 
         public void ScrollToSelected(bool immediate = false) =>
             pendingScrollOperation = immediate ? PendingScrollOperation.Immediate : PendingScrollOperation.Standard;
+
+        #region Button selection logic
+
+        public bool OnPressed(KeyBindingPressEvent<GlobalAction> e)
+        {
+            switch (e.Action)
+            {
+                case GlobalAction.SelectNext:
+                case GlobalAction.SelectNextGroup:
+                    SelectNext(1, e.Action == GlobalAction.SelectNextGroup);
+                    return true;
+                case GlobalAction.SelectPrevious:
+                case GlobalAction.SelectPreviousGroup:
+                    SelectNext(-1, e.Action == GlobalAction.SelectPreviousGroup);
+                    return true;
+            }
+            
+            return false;
+        }
+
+        public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
+        {
+        }
+
+        #endregion
 
         protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
         {
