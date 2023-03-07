@@ -14,15 +14,19 @@ using osu.Framework.Screens;
 using osu.Framework.Threading;
 using osu.Game.Beatmaps;
 using osu.Game.Graphics;
+using osu.Game.Graphics.UserInterface;
 using osu.Game.Overlays;
 using osu.Game.Rulesets;
 using osu.Game.Screens.Play;
+using osu.Game.Screens.Select;
 
 namespace composer.Editor.Screens.Select
 {
     public abstract partial class BeatmapSelect : ScreenWithBeatmapBackground, IKeyBindingHandler<GlobalAction>
     {
         protected const float BACKGROUND_BLUR = 20;
+        
+        public FilterControl FilterControl { get; private set; } = null!;
 
         protected virtual bool ControlGlobalMusic => true;
 
@@ -51,39 +55,76 @@ namespace composer.Editor.Screens.Select
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
                 RelativeSizeAxes = Axes.Both,
+                BleedTop = FilterControl.HEIGHT,
                 SelectionChanged = updateSelectedBeatmap,
                 BeatmapSetsChanged = carouselBeatmapsLoaded
             }, c => carouselContainer.Child = c);
 
             transferRulesetValue();
 
-            InternalChild = new GridContainer
+            AddRangeInternal(new Drawable[]
             {
-                RelativeSizeAxes = Axes.Both,
-                RowDimensions = new Dimension[] { new() },
-                Content = new Drawable[][]
+                new ResetScrollContainer(() => Carousel.ScrollToSelected())
                 {
-                    new Drawable[]
+                    RelativeSizeAxes = Axes.Y,
+                    Width = 250
+                },
+                new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Children = new Drawable[]
                     {
-                        new Box
+                        new GridContainer // used for max width
                         {
                             RelativeSizeAxes = Axes.Both,
-                            Alpha = 0,
-                            AlwaysPresent = true
-                        },
-                        carouselContainer = new Container
-                        {
-                            RelativeSizeAxes = Axes.Both,
-                            Padding = new MarginPadding
+                            ColumnDimensions = new[]
                             {
-                                Right = 12,
-                                Left = 104,
-                                Vertical = 12,
+                                new Dimension(),
+                                new Dimension(GridSizeMode.Relative, 0.5f, maxSize: 850)
+                            },
+                            Content = new[]
+                            {
+                                new Drawable[]
+                                {
+                                    new Box
+                                    {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Alpha = 0,
+                                        AlwaysPresent = true
+                                    },
+                                    carouselContainer = new Container
+                                    {
+                                        RelativeSizeAxes = Axes.Both,
+                                        Padding = new MarginPadding
+                                        {
+                                            Right = 12,
+                                            Left = 104,
+                                            Bottom = 12,
+                                            Top = FilterControl.HEIGHT
+                                        },
+                                        Child = new LoadingSpinner(true) { State = { Value = Visibility.Visible } }
+                                    }
+                                }
                             }
+                        },
+                        FilterControl = new FilterControl
+                        {
+                            RelativeSizeAxes = Axes.X,
+                            Height = FilterControl.HEIGHT,
+                            FilterChanged = ApplyFilterToCarousel
                         }
                     }
                 }
-            };
+            });
+        }
+
+        protected virtual void ApplyFilterToCarousel(FilterCriteria criteria)
+        {
+            var shouldDebounce = this.IsCurrentScreen();
+            
+            Carousel.Filter(criteria, shouldDebounce);
         }
 
         private DependencyContainer dependencies = null!;
@@ -164,9 +205,9 @@ namespace composer.Editor.Screens.Select
                 // Even if a ruleset mismatch was not the cause (ie. a text filter is applied),
                 // we still want to temporarily show the new beatmap, bypassing filters.
                 // This will be undone the next time the user changes the filter.
-                // var criteria = FilterControl.CreateCriteria();
-                // criteria.SelectedBeatmapSet = beatmap.BeatmapInfo.BeatmapSet;
-                // Carousel.Filter(criteria);
+                var criteria = FilterControl.CreateCriteria();
+                criteria.SelectedBeatmapSet = beatmap.BeatmapInfo.BeatmapSet;
+                Carousel.Filter(criteria);
 
                 Carousel.SelectBeatmap(beatmap.BeatmapInfo);
             }
@@ -266,6 +307,7 @@ namespace composer.Editor.Screens.Select
             base.OnEntering(e);
 
             this.FadeInFromZero(250);
+            FilterControl.Activate();
 
             beginLooping();
         }
@@ -277,7 +319,7 @@ namespace composer.Editor.Screens.Select
             Carousel.AllowSelection = true;
 
             beginLooping();
-            
+
             if (Beatmap != null && !Beatmap.Value.BeatmapSetInfo.DeletePending)
             {
                 updateCarouselSelection();
@@ -293,7 +335,12 @@ namespace composer.Editor.Screens.Select
                 }
             }
             
+            FilterControl.MoveToY(0, 400, Easing.OutQuint);
+            FilterControl.FadeIn(100, Easing.OutQuint);
+
             this.FadeIn(250, Easing.OutQuint);
+            
+            FilterControl.Activate();
         }
 
         public override void OnSuspending(ScreenTransitionEvent e)
@@ -318,12 +365,17 @@ namespace composer.Editor.Screens.Select
             Carousel.AllowSelection = false;
 
             endLooping();
+            
+            FilterControl.MoveToY(-120, 500, Easing.OutQuint);
+            FilterControl.FadeOut(200, Easing.OutQuint);
 
             this.FadeOut(400, Easing.OutQuint);
+            
+            FilterControl.Deactivate();
         }
-        
+
         private bool isHandlingLooping;
-        
+
         private void beginLooping()
         {
             if (!ControlGlobalMusic)
@@ -355,7 +407,6 @@ namespace composer.Editor.Screens.Select
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
-            
             decoupledRuleset.UnbindAll();
 
             if (music.IsNotNull())
@@ -374,12 +425,12 @@ namespace composer.Editor.Screens.Select
                     backgroundModeBeatmap.BlurAmount.Value = BACKGROUND_BLUR;
                 });
             }
-            
+
             // update components...
         }
-        
+
         private readonly WeakReference<ITrack?> lastTrack = new(null);
-        
+
         private void ensurePlayingSelected()
         {
             if (!ControlGlobalMusic)
@@ -397,7 +448,7 @@ namespace composer.Editor.Screens.Select
 
             lastTrack.SetTarget(track);
         }
-        
+
         private void carouselBeatmapsLoaded()
         {
             bindBindables();
@@ -429,7 +480,7 @@ namespace composer.Editor.Screens.Select
                 performUpdateSelected();
             }
         }
-        
+
         private bool boundLocalBindables;
 
         private void bindBindables()
@@ -459,7 +510,7 @@ namespace composer.Editor.Screens.Select
 
             boundLocalBindables = true;
         }
-        
+
         private bool transferRulesetValue()
         {
             if (decoupledRuleset.Value?.Equals(Ruleset.Value) == true)
@@ -488,12 +539,28 @@ namespace composer.Editor.Screens.Select
                     FinaliseSelection();
                     return true;
             }
-            
+
             return false;
         }
 
         public void OnReleased(KeyBindingReleaseEvent<GlobalAction> e)
         {
+        }
+
+        private partial class ResetScrollContainer : Container
+        {
+            private readonly Action? onHoverAction;
+
+            public ResetScrollContainer(Action onHoverAction)
+            {
+                this.onHoverAction = onHoverAction;
+            }
+
+            protected override bool OnHover(HoverEvent e)
+            {
+                onHoverAction?.Invoke();
+                return base.OnHover(e);
+            }
         }
     }
 }
