@@ -1,4 +1,5 @@
 ﻿using composer.Editor.Graphics.Cursor;
+using composer.Editor.Input;
 using composer.Editor.Screens.Menu;
 using composer.Resources;
 using osu.Framework.Allocation;
@@ -6,6 +7,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.IO.Stores;
 using osu.Game;
+using osu.Game.Configuration;
+using osu.Game.Graphics.Containers;
 using osu.Game.Screens;
 
 namespace composer.Editor
@@ -13,6 +16,8 @@ namespace composer.Editor
     public partial class Composer : OsuGameBase
     {
         private Container content = null!;
+
+        protected override Container CreateScalingContainer() => new ScalingContainer(ScalingMode.Everything);
 
         protected override Container<Drawable> Content => content;
 
@@ -22,11 +27,6 @@ namespace composer.Editor
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent)
             => DependencyContainer = new DependencyContainer(base.CreateChildDependencies(parent));
-
-        [BackgroundDependencyLoader]
-        private void load()
-        {
-        }
 
         protected override void LoadComplete()
         {
@@ -38,7 +38,7 @@ namespace composer.Editor
                 {
                     RelativeSizeAxes = Axes.Both,
                     State = { Value = Visibility.Visible },
-                    Child = content = new Container
+                    Child = content = new GlobalActionContainer(this)
                     {
                         RelativeSizeAxes = Axes.Both,
                         Child = ScreenStack = new OsuScreenStack()
@@ -54,7 +54,7 @@ namespace composer.Editor
         protected override void InitialiseFonts()
         {
             Resources.AddStore(new DllResourceStore(typeof(EditorResources).Assembly));
-            
+
             AddFont(Resources, "Fonts/Montserrat/Montserrat-Bold");
             AddFont(Resources, "Fonts/Montserrat/Montserrat-SemiBold");
             AddFont(Resources, "Fonts/Montserrat/Montserrat-Medium");

@@ -1,54 +1,68 @@
 ﻿using composer.Editor.Graphics;
 using osu.Framework.Allocation;
-using osu.Framework.Bindables;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input.Events;
 using osu.Game.Beatmaps;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.Sprites;
+using osu.Game.Screens.Select.Carousel;
 using osuTK;
 using osuTK.Graphics;
 
 namespace composer.Editor.Screens.Select.Carousel
 {
-    public partial class BeatmapCard : CompositeDrawable
+    public partial class DrawableCarouselBeatmapCard : DrawableCarouselItem
     {
+        public const float CAROUSEL_BEATMAP_SPACING = 5;
+
+        public const float HEIGHT = height + CAROUSEL_BEATMAP_SPACING;
+
+        private const float height = 45;
+
         private const float width_selected = 0.85f;
         private const float width_normal = 0.75f;
         private const float content_height_normal = 1f;
         private const float content_height_selected = 0.925f;
 
-        private readonly BeatmapInfo info;
+        private Action<BeatmapInfo>? selectRequested;
+
+        private readonly BeatmapInfo beatmapInfo;
 
         private Container infoContainer = null!;
         private Container contentContainer = null!;
         private OsuTextFlowContainer mappedText = null!;
 
-        // todo: move this to a more generalized form in order to let BeatmapSetCard to have the same logic.
-        //       ~ Nora
-        public BindableBool State { get; } = new();
-
-        public BeatmapCard(BeatmapInfo info)
+        public DrawableCarouselBeatmapCard(CarouselBeatmap panel)
         {
-            this.info = info;
+            beatmapInfo = panel.BeatmapInfo;
+            Item = panel;
         }
 
         [Resolved]
         private OsuColour colour { get; set; } = null!;
 
         private Color4 getDifficultyColour()
-            => info.StarRating >= 9f ? OsuColour.Gray(26) : colour.ForStarDifficulty(info.StarRating);
+            => beatmapInfo.StarRating >= 9f ? OsuColour.Gray(26) : colour.ForStarDifficulty(beatmapInfo.StarRating);
 
-        [BackgroundDependencyLoader]
-        private void load()
+        [BackgroundDependencyLoader(true)]
+        private void load(BeatmapSelect? select)
         {
-            InternalChild = contentContainer = new Container
+            Header.Height = height;
+
+            if (select != null)
             {
-                RelativeSizeAxes = Axes.Both,
+                selectRequested = b => select.FinaliseSelection(b);
+            }
+
+            Header.Child = contentContainer = new Container
+            {
+                RelativeSizeAxes = Axes.X,
+                Height = height,
                 Width = width_normal,
                 Anchor = Anchor.CentreRight,
                 Origin = Anchor.CentreRight,
@@ -61,12 +75,13 @@ namespace composer.Editor.Screens.Select.Carousel
                         RelativeSizeAxes = Axes.Both,
                         Colour = getDifficultyColour()
                     },
-                    info.Ruleset.CreateInstance().CreateIcon().With(d =>
+                    beatmapInfo.Ruleset.CreateInstance().CreateIcon().With(d =>
                     {
                         d.Size = new Vector2(20);
-                        d.Anchor = Anchor.CentreLeft;
-                        d.Origin = Anchor.CentreLeft;
-                        d.X = 7;
+                        d.Anchor = Anchor.CentreRight;
+                        d.Origin = Anchor.CentreRight;
+                        d.RelativePositionAxes = Axes.X;
+                        d.X = -0.9475f;
                         d.Colour = ComposerColour.ForegroundTextColourFor(getDifficultyColour(), 13);
                     }),
                     infoContainer = new Container
@@ -107,8 +122,8 @@ namespace composer.Editor.Screens.Select.Carousel
                                         Origin = Anchor.CentreLeft,
                                         Children = new Drawable[]
                                         {
-                                            new DifficultyPill(info.StarRating),
-                                            mappedText = new OsuTextFlowContainer(c => c.Font = OsuFont.GetFont(Typeface.Inter, 12))
+                                            new DifficultyPill(beatmapInfo.StarRating),
+                                            mappedText = new OsuTextFlowContainer(c => c.Font = OsuFont.GetFont(Typeface.Inter, 12, FontWeight.Regular))
                                             {
                                                 RelativeSizeAxes = Axes.X,
                                                 AutoSizeAxes = Axes.Y,
@@ -125,7 +140,7 @@ namespace composer.Editor.Screens.Select.Carousel
                                         Child = new OsuSpriteText
                                         {
                                             Font = OsuFont.GetFont(Typeface.Inter, weight: FontWeight.SemiBold),
-                                            Text = info.DifficultyName
+                                            Text = beatmapInfo.DifficultyName
                                         }
                                     }
                                 }
@@ -136,20 +151,10 @@ namespace composer.Editor.Screens.Select.Carousel
             };
 
             mappedText.AddText("mapped by ");
-            mappedText.AddText(info.Metadata.Author.Username, c => c.Font = OsuFont.GetFont(Typeface.Inter, 12, FontWeight.Bold));
-
-            State.BindValueChanged(onStateChange);
+            mappedText.AddText(beatmapInfo.Metadata.Author.Username, c => c.Font = OsuFont.GetFont(Typeface.Inter, 12, FontWeight.Bold));
         }
 
-        private void onStateChange(ValueChangedEvent<bool> val)
-        {
-            if (val.NewValue)
-                Selected();
-            else
-                Deselected();
-        }
-
-        private void Selected()
+        protected override void Selected()
         {
             contentContainer.ResizeWidthTo(width_selected, 500, Easing.OutQuint);
             infoContainer.ResizeHeightTo(content_height_selected, 500, Easing.OutQuint);
@@ -162,7 +167,7 @@ namespace composer.Editor.Screens.Select.Carousel
             };
         }
 
-        private void Deselected()
+        protected override void Deselected()
         {
             contentContainer.ResizeWidthTo(width_normal, 500, Easing.OutQuint);
             infoContainer.ResizeHeightTo(content_height_normal, 500, Easing.OutQuint);
@@ -173,6 +178,14 @@ namespace composer.Editor.Screens.Select.Carousel
                 Radius = 0,
                 Roundness = 5,
             };
+        }
+
+        protected override bool OnClick(ClickEvent e)
+        {
+            if (Item?.State.Value == CarouselItemState.Selected)
+                selectRequested?.Invoke(beatmapInfo);
+
+            return base.OnClick(e);
         }
 
         private partial class DifficultyPill : CompositeDrawable

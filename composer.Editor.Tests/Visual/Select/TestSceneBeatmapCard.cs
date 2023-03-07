@@ -8,6 +8,7 @@ using osu.Game.Rulesets.Catch;
 using osu.Game.Rulesets.Mania;
 using osu.Game.Rulesets.Osu;
 using osu.Game.Rulesets.Taiko;
+using osu.Game.Screens.Select.Carousel;
 using osu.Game.Tests.Visual;
 using osuTK;
 
@@ -21,8 +22,8 @@ namespace composer.Editor.Tests.Visual.Select
             var info = TestResources.CreateTestBeatmapSetInfo(null,
                 new[] { new OsuRuleset().RulesetInfo, new TaikoRuleset().RulesetInfo, new CatchRuleset().RulesetInfo, new ManiaRuleset().RulesetInfo });
 
-            var cards = new List<BeatmapCard>();
-            BeatmapCard? selectedCard = null;
+            var cards = new List<DrawableCarouselBeatmapCard>();
+            DrawableCarouselBeatmapCard? selectedCard = null;
             
             AddStep("clear screen", Clear);
             AddStep("add cards", () =>
@@ -41,7 +42,8 @@ namespace composer.Editor.Tests.Visual.Select
                 
                 foreach (var beatmap in info.Beatmaps)
                 {
-                    var card = new BeatmapCard(beatmap)
+                    var item = new CarouselBeatmap(beatmap);
+                    var card = new DrawableCarouselBeatmapCard(item)
                     {
                         RelativeSizeAxes = Axes.X,
                         Height = 45,
@@ -57,10 +59,10 @@ namespace composer.Editor.Tests.Visual.Select
             AddStep("select random", () =>
             {
                 if (selectedCard != null)
-                    selectedCard.State.Value = false;
+                    selectedCard.Item!.State.Value = CarouselItemState.NotSelected;
 
                 var card = cards[RNG.Next(cards.Count)];
-                card.State.Value = true;
+                card.Item!.State.Value = CarouselItemState.Selected;
                 selectedCard = card;
             });
         }

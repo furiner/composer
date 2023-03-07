@@ -30,7 +30,7 @@ namespace composer.Editor.Screens.Select.Carousel
                     RelativeSizeAxes = Axes.Both,
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Colour = ColourInfo.GradientHorizontal(OsuColour.Gray(.05f).Opacity(.9f), OsuColour.Gray(.05f).Opacity(.8f))
+                    Colour = ColourInfo.GradientHorizontal(OsuColour.Gray(.05f).Opacity(.8f), OsuColour.Gray(.05f).Opacity(.6f))
                 }
             };
         }
