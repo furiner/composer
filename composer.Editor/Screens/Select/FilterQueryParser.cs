@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+// See the LICENCE file in the repository root for full licence text.
+
+using System.Globalization;
 using System.Text.RegularExpressions;
 using osu.Game.Screens.Select;
 using osu.Game.Screens.Select.Filter;
